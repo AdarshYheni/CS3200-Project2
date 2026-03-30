@@ -35,10 +35,11 @@ The `users` collection is separate because users exist independently and are ref
 Some fields (like property_id and unit_id in listings) are duplicated to improve query performance. This avoids the need for joins at the cost of minor redundancy, which is acceptable for this use case.
 
 
-## Diagrams
+## Supporting Docs
 
-- UML Class Diagram: `diagrams/UML_Class_Diagram.png`
-- MongoDB ERD: `diagrams/Mongo_ERD.png`
+- UML Class Diagram: `docs/CS3200_Project2_UMLClassDiagram.png`
+- MongoDB ERD: `docs/CS3200_Project2_MongoERD.png`
+- Business Requirements: `docs/CS3200_Project2_BusinessReqDoc.pdf`
 
 
 ## How to Set Up the Database

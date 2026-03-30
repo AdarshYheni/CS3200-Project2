@@ -1,0 +1,84 @@
+[
+  {
+    "_id": "property_001",
+    "owner_user_id": "user_010",
+    "address": "123 Main St",
+    "city": "Seattle",
+    "state": "WA",
+    "zip_code": "98101",
+    "units": [
+      {
+        "unit_id": "unit_001",
+        "unit_number": "A1",
+        "bedrooms": 2,
+        "bathrooms": 1.5,
+        "unit_type": "apartment",
+        "leases": [
+          {
+            "lease_id": "lease_001",
+            "lease_start_date": { "$date": "2026-01-01T00:00:00Z" },
+            "lease_end_date": { "$date": "2026-12-31T00:00:00Z" },
+            "sublease_allowed": true,
+            "lease_status": "active",
+            "tenants": [
+              {
+                "user_id": "user_001",
+                "tenant_role": "primary",
+                "move_in_date": { "$date": "2026-01-01T00:00:00Z" },
+                "move_out_date": { "$date": "2026-12-31T00:00:00Z" }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_id": "property_002",
+    "owner_user_id": "user_010",
+    "address": "456 Pine Ave",
+    "city": "Bellevue",
+    "state": "WA",
+    "zip_code": "98004",
+    "units": [
+      {
+        "unit_id": "unit_002",
+        "unit_number": "B201",
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "unit_type": "apartment",
+        "leases": [
+          {
+            "lease_id": "lease_002",
+            "lease_start_date": { "$date": "2026-02-01T00:00:00Z" },
+            "lease_end_date": { "$date": "2026-08-31T00:00:00Z" },
+            "sublease_allowed": true,
+            "lease_status": "active",
+            "tenants": [
+              {
+                "user_id": "user_002",
+                "tenant_role": "primary",
+                "move_in_date": { "$date": "2026-02-01T00:00:00Z" },
+                "move_out_date": { "$date": "2026-08-31T00:00:00Z" }
+              },
+              {
+                "user_id": "user_003",
+                "tenant_role": "roommate",
+                "move_in_date": { "$date": "2026-02-01T00:00:00Z" },
+                "move_out_date": { "$date": "2026-08-31T00:00:00Z" }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "unit_id": "unit_003",
+        "unit_number": "B202",
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "unit_type": "studio",
+        "leases": []
+      }
+    ]
+  }
+]

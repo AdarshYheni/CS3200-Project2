@@ -1,0 +1,75 @@
+[
+  {
+    "_id": "listing_001",
+    "lease_id": "lease_001",
+    "property_id": "property_001",
+    "unit_id": "unit_001",
+    "created_by_user_id": "user_001",
+    "available_from": { "$date": "2026-06-01T00:00:00Z" },
+    "available_to": { "$date": "2026-08-31T00:00:00Z" },
+    "listing_price": 1200,
+    "listing_status": "open",
+    "listing_created_at": { "$date": "2026-03-20T09:00:00Z" },
+    "applications": [
+      {
+        "application_id": "app_001",
+        "applicant_user_id": "user_002",
+        "applied_at": { "$date": "2026-03-22T13:00:00Z" },
+        "application_status": "pending",
+        "message": "Looking for summer housing.",
+        "review": null,
+        "contract": null
+      }
+    ]
+  },
+  {
+    "_id": "listing_002",
+    "lease_id": "lease_002",
+    "property_id": "property_002",
+    "unit_id": "unit_002",
+    "created_by_user_id": "user_002",
+    "available_from": { "$date": "2026-05-15T00:00:00Z" },
+    "available_to": { "$date": "2026-07-31T00:00:00Z" },
+    "listing_price": 1450,
+    "listing_status": "closed",
+    "listing_created_at": { "$date": "2026-03-18T11:00:00Z" },
+    "applications": [
+      {
+        "application_id": "app_002",
+        "applicant_user_id": "user_004",
+        "applied_at": { "$date": "2026-03-21T16:30:00Z" },
+        "application_status": "approved",
+        "message": "Need temporary housing.",
+        "review": {
+          "review_id": "review_001",
+          "reviewer_user_id": "user_010",
+          "reviewed_at": { "$date": "2026-03-22T18:00:00Z" },
+          "decision": "approved",
+          "review_notes": "Fits lease conditions."
+        },
+        "contract": {
+          "contract_id": "contract_001",
+          "start_date": { "$date": "2026-05-15T00:00:00Z" },
+          "end_date": { "$date": "2026-07-31T00:00:00Z" },
+          "contract_status": "active",
+          "created_at": { "$date": "2026-03-22T18:30:00Z" }
+        }
+      },
+      {
+        "application_id": "app_003",
+        "applicant_user_id": "user_003",
+        "applied_at": { "$date": "2026-03-22T10:00:00Z" },
+        "application_status": "rejected",
+        "message": "Interested but dates flexible.",
+        "review": {
+          "review_id": "review_002",
+          "reviewer_user_id": "user_010",
+          "reviewed_at": { "$date": "2026-03-23T12:00:00Z" },
+          "decision": "rejected",
+          "review_notes": "Dates do not align."
+        },
+        "contract": null
+      }
+    ]
+  }
+]

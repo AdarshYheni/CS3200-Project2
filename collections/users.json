@@ -1,0 +1,50 @@
+[
+  {
+    "_id": "user_001",
+    "name": "Alice Chen",
+    "email": "alice.chen@example.com",
+    "phone_number": "425-555-0101",
+    "account_created_at": { "$date": "2026-03-01T09:00:00Z" },
+    "roles": ["tenant", "listing_creator"],
+    "landlord_profile": null
+  },
+  {
+    "_id": "user_002",
+    "name": "Brian Kim",
+    "email": "brian.kim@example.com",
+    "phone_number": "425-555-0102",
+    "account_created_at": { "$date": "2026-03-02T10:00:00Z" },
+    "roles": ["tenant", "applicant"],
+    "landlord_profile": null
+  },
+  {
+    "_id": "user_003",
+    "name": "Carla Patel",
+    "email": "carla.patel@example.com",
+    "phone_number": "425-555-0103",
+    "account_created_at": { "$date": "2026-03-03T11:00:00Z" },
+    "roles": ["tenant", "applicant"],
+    "landlord_profile": null
+  },
+  {
+    "_id": "user_004",
+    "name": "David Singh",
+    "email": "david.singh@example.com",
+    "phone_number": "425-555-0104",
+    "account_created_at": { "$date": "2026-03-04T12:00:00Z" },
+    "roles": ["applicant"],
+    "landlord_profile": null
+  },
+  {
+    "_id": "user_010",
+    "name": "Adarsh Yhenishetty",
+    "email": "adarsh.yhenishetty@example.com",
+    "phone_number": "206-555-0199",
+    "account_created_at": { "$date": "2026-02-15T10:30:00Z" },
+    "roles": ["landlord", "reviewer"],
+    "landlord_profile": {
+      "contact_email": "leasing@adarshproperties.com",
+      "contact_phone": "206-555-1111"
+    }
+  }
+]

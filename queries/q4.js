@@ -1,28 +1,19 @@
-// Q5: Nested workflow query
-// Show approved applications that have contracts, including reviewer and contract details.
+// Q4: Update query
+// Update an embedded application by application_id.
+// Change app_001 from pending to rejected and add a review object.
 
-db.sublease_listings.aggregate([
-  { $unwind: "$applications" },
+db.sublease_listings.updateOne(
+  { "applications.application_id": "app_001" },
   {
-    $match: {
-      "applications.application_status": "approved",
-      "applications.contract": { $ne: null }
-    }
-  },
-  {
-    $project: {
-      _id: 1,
-      lease_id: 1,
-      created_by_user_id: 1,
-      application_id: "$applications.application_id",
-      applicant_user_id: "$applications.applicant_user_id",
-      application_status: "$applications.application_status",
-      reviewer_user_id: "$applications.review.reviewer_user_id",
-      review_decision: "$applications.review.decision",
-      contract_id: "$applications.contract.contract_id",
-      contract_status: "$applications.contract.contract_status",
-      contract_start_date: "$applications.contract.start_date",
-      contract_end_date: "$applications.contract.end_date"
+    $set: {
+      "applications.$.application_status": "rejected",
+      "applications.$.review": {
+        "review_id": "review_003",
+        "reviewer_user_id": "user_010",
+        "reviewed_at": new Date("2026-03-25T15:00:00Z"),
+        "decision": "rejected",
+        "review_notes": "Application was reviewed and rejected due to listing preference."
+      }
     }
   }
-]);
+);

@@ -1,0 +1,214 @@
+{
+  "database": "subletsync_mongo",
+  "note": "3 collections — properties is the main housing hierarchy, with units / leases / tenants embedded inside it. sublease_listings stores the listing workflow, with applications / review / contract embedded inside it. users is separate because users exist independently and are referenced from multiple places.",
+
+  "collections": {
+    "users": {
+      "description": "User profiles for everyone in the system. This includes landlords, tenants, applicants, listing creators, and reviewers. landlord_profile is embedded because it only exists as extra information for a user and does not need its own root collection.",
+      "count": 5,
+      "relationships": {
+        "landlord_profile": "Embedded inside the user document",
+        "properties": "Referenced by properties.owner_user_id",
+        "tenants": "Referenced by tenants.user_id inside embedded lease tenant records",
+        "sublease_listings": "Referenced by sublease_listings.created_by_user_id",
+        "applications": "Referenced by applications.applicant_user_id",
+        "review": "Referenced by review.reviewer_user_id"
+      },
+      "schema": {
+        "_id": "String or ObjectId",
+        "name": "String, required",
+        "email": "String, required, unique",
+        "phone_number": "String",
+        "account_created_at": "String (ISO datetime) or Date",
+        "roles": ["String"],
+        "landlord_profile": {
+          "contact_email": "String",
+          "contact_phone": "String"
+        }
+      },
+      "example": {
+        "_id": "user_010",
+        "name": "Adarsh Yhenishetty",
+        "email": "adarsh@example.com",
+        "phone_number": "425-555-9999",
+        "account_created_at": "2026-02-15T10:30:00Z",
+        "roles": ["landlord", "reviewer"],
+        "landlord_profile": {
+          "contact_email": "adarsh.leasing@example.com",
+          "contact_phone": "425-555-1111"
+        }
+      }
+    },
+
+    "properties": {
+      "description": "Main housing collection. Each property belongs to one owner user and embeds its units. Each unit embeds its leases, and each lease embeds its tenants. This replaces the normalized SQL tables Property, Unit, Lease, and Tenant with a hierarchical document structure.",
+      "count": 2,
+      "relationships": {
+        "owner_user_id": "Reference to users._id",
+        "units": "Embedded inside the property document",
+        "leases": "Embedded inside each unit",
+        "tenants": "Embedded inside each lease, but each tenant subdocument stores user_id that points to users._id"
+      },
+      "schema": {
+        "_id": "String or ObjectId",
+        "owner_user_id": "String or ObjectId — points to users._id",
+        "address": "String, required",
+        "city": "String, required",
+        "state": "String, required",
+        "zip_code": "String, required",
+        "units": [
+          {
+            "unit_id": "String or ObjectId",
+            "unit_number": "String, required",
+            "bedrooms": "Number",
+            "bathrooms": "Number",
+            "unit_type": "String",
+            "leases": [
+              {
+                "lease_id": "String or ObjectId",
+                "lease_start_date": "String (ISO datetime) or Date",
+                "lease_end_date": "String (ISO datetime) or Date",
+                "sublease_allowed": "Boolean",
+                "lease_status": "String",
+                "tenants": [
+                  {
+                    "user_id": "String or ObjectId — points to users._id",
+                    "tenant_role": "String",
+                    "move_in_date": "String (ISO datetime) or Date",
+                    "move_out_date": "String (ISO datetime) or Date"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "example": {
+        "_id": "property_001",
+        "owner_user_id": "user_010",
+        "address": "123 Main St",
+        "city": "Seattle",
+        "state": "WA",
+        "zip_code": "98101",
+        "units": [
+          {
+            "unit_id": "unit_001",
+            "unit_number": "A1",
+            "bedrooms": 2,
+            "bathrooms": 1.5,
+            "unit_type": "apartment",
+            "leases": [
+              {
+                "lease_id": "lease_001",
+                "lease_start_date": "2026-01-01T00:00:00Z",
+                "lease_end_date": "2026-12-31T00:00:00Z",
+                "sublease_allowed": true,
+                "lease_status": "active",
+                "tenants": [
+                  {
+                    "user_id": "user_001",
+                    "tenant_role": "primary",
+                    "move_in_date": "2026-01-01T00:00:00Z",
+                    "move_out_date": "2026-12-31T00:00:00Z"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    "sublease_listings": {
+      "description": "Main listing workflow collection. Each listing references the lease it belongs to and the user who created it. Applications are embedded inside the listing document. Each application may contain one embedded review and one embedded contract. This replaces the normalized SQL tables SubleaseListing, Application, Review, and SubleaseContract.",
+      "count": 2,
+      "relationships": {
+        "lease_id": "Reference to properties.units.leases.lease_id",
+        "created_by_user_id": "Reference to users._id",
+        "applications": "Embedded inside the listing document",
+        "applications.applicant_user_id": "Reference to users._id",
+        "applications.review": "Embedded inside application",
+        "applications.review.reviewer_user_id": "Reference to users._id",
+        "applications.contract": "Embedded inside application"
+      },
+      "schema": {
+        "_id": "String or ObjectId",
+        "lease_id": "String or ObjectId — points to embedded lease record",
+        "property_id": "String or ObjectId",
+        "unit_id": "String or ObjectId",
+        "created_by_user_id": "String or ObjectId — points to users._id",
+        "available_from": "String (ISO datetime) or Date",
+        "available_to": "String (ISO datetime) or Date",
+        "listing_price": "Number",
+        "listing_status": "String",
+        "listing_created_at": "String (ISO datetime) or Date",
+        "applications": [
+          {
+            "application_id": "String or ObjectId",
+            "applicant_user_id": "String or ObjectId — points to users._id",
+            "applied_at": "String (ISO datetime) or Date",
+            "application_status": "String",
+            "message": "String",
+            "review": {
+              "review_id": "String or ObjectId",
+              "reviewer_user_id": "String or ObjectId — points to users._id",
+              "reviewed_at": "String (ISO datetime) or Date",
+              "decision": "String",
+              "review_notes": "String"
+            },
+            "contract": {
+              "contract_id": "String or ObjectId",
+              "start_date": "String (ISO datetime) or Date",
+              "end_date": "String (ISO datetime) or Date",
+              "contract_status": "String",
+              "created_at": "String (ISO datetime) or Date"
+            }
+          }
+        ]
+      },
+      "example": {
+        "_id": "listing_002",
+        "lease_id": "lease_002",
+        "property_id": "property_002",
+        "unit_id": "unit_002",
+        "created_by_user_id": "user_002",
+        "available_from": "2026-05-15T00:00:00Z",
+        "available_to": "2026-07-31T00:00:00Z",
+        "listing_price": 1450,
+        "listing_status": "closed",
+        "listing_created_at": "2026-03-18T11:00:00Z",
+        "applications": [
+          {
+            "application_id": "app_002",
+            "applicant_user_id": "user_004",
+            "applied_at": "2026-03-21T16:30:00Z",
+            "application_status": "approved",
+            "message": "Need temporary housing.",
+            "review": {
+              "review_id": "review_001",
+              "reviewer_user_id": "user_010",
+              "reviewed_at": "2026-03-22T18:00:00Z",
+              "decision": "approved",
+              "review_notes": "Fits lease conditions."
+            },
+            "contract": {
+              "contract_id": "contract_001",
+              "start_date": "2026-05-15T00:00:00Z",
+              "end_date": "2026-07-31T00:00:00Z",
+              "contract_status": "active",
+              "created_at": "2026-03-22T18:30:00Z"
+            }
+          }
+        ]
+      }
+    }
+  },
+
+  "design_notes": {
+    "why_embed_in_properties": "Units, leases, and tenants all belong directly to a property's housing structure. They do not need to exist as separate top-level collections in this Mongo design. Embedding them makes it easier to retrieve a property's full occupancy and lease structure in one document.",
+    "why_embed_in_sublease_listings": "Applications belong to a specific listing, and review / contract belong to a specific application. These objects are tightly tied to the listing workflow, so embedding them avoids extra collections and unnecessary joins.",
+    "why_users_separate": "Users must be searchable independently and are reused across many parts of the system. A user may be a landlord, tenant, applicant, listing creator, or reviewer. If users were embedded everywhere, common operations would require scanning many documents and would duplicate profile data heavily.",
+    "denormalization_tradeoff": "property_id and unit_id are copied into sublease_listings even though lease_id already links the listing to the housing hierarchy. This duplication is intentional because it makes listing queries easier and avoids extra navigation through embedded property documents.",
+    "lookup_table_tradeoff": "SQL lookup tables such as UserRole, UnitType, TenantRole, ListingStatus, ApplicationStatus, and ContractStatus were flattened into ordinary string fields. This keeps the Mongo model simpler and more natural for document storage."
+  }
+}

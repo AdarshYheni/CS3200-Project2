@@ -13,7 +13,7 @@ The full business requirements and UML conceptual model from Project 1 are inclu
 
 ## Demo Video
 
-(Add your video link here)
+`youtube-vid.txt`
 
 
 ## How the Collections Were Designed
